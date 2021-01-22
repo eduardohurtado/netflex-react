@@ -1,11 +1,17 @@
+// Dependencies
 import React, { Suspense } from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
 
-//Components
+//Tools
 import Loading from "./tools/components/Loading/Loading";
 
-//Lazy load components
-// const AboutPage = React.lazy(() => import("./components/AboutPage"));
+// Components
+import HomePage from "./views/home/components/HomePage/HomePage";
+
+//Lazy loaded components
+const MovieDetail = React.lazy(
+  () => import("./views/home/components/MovieDetail/MovieDetail")
+);
 
 //Global styles
 import "./scss/normalize.scss";
@@ -18,23 +24,22 @@ class App extends React.Component {
   render(): JSX.Element {
     return (
       <Router>
-        {/* <ReactNotification /> */}
-        <div className="gridContainer">
-          {/* <NavigationBar /> */}
+        <div>
           <Route
             exact
             path="/"
             render={() => {
-              return "Home Page";
+              return <HomePage />;
             }}
           ></Route>
+
           <Route
             exact
-            path="/Dashboard"
+            path="/MovieDetail"
             render={() => {
               return (
                 <Suspense fallback={<Loading />}>
-                  <div>Dashboard Page</div>
+                  <MovieDetail />
                 </Suspense>
               );
             }}

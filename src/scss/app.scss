@@ -3,8 +3,9 @@ html {
 }
 
 body {
-  background: radial-gradient(circle, #fff, #bbb);
   background-size: 100% 100%;
+  color: #ffffff;
+  overflow: auto;
   p,
   h1,
   h2,
@@ -22,13 +23,4 @@ body {
     font-family: "Akzidenz-Grotesk BQ";
     cursor: pointer;
   }
-}
-
-.gridContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: min-content repeat(3, 1fr) min-content;
-  height: 100vh;
-  margin: auto;
-  overflow: hidden;
 }
