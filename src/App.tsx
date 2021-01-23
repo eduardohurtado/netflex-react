@@ -2,22 +2,22 @@
 import React, { Suspense } from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
 
-//Tools
+// Tools
 import Loading from "./tools/components/Loading/Loading";
 
 // Components
 import HomePage from "./views/home/components/HomePage/HomePage";
 
-//Lazy loaded components
+// Lazy loaded components
 const MovieDetail = React.lazy(
   () => import("./views/home/components/MovieDetail/MovieDetail")
 );
 
-//Global styles
+// Global styles
 import "./scss/normalize.scss";
 import "./scss/app.scss";
 
-//Font selector
+// Font selector
 import "./fonts/fontSelector.scss";
 
 class App extends React.Component {
@@ -35,7 +35,7 @@ class App extends React.Component {
 
           <Route
             exact
-            path="/MovieDetail"
+            path="/MovieDetails/:id"
             render={() => {
               return (
                 <Suspense fallback={<Loading />}>

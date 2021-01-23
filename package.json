@@ -1,8 +1,8 @@
 {
-  "name": "task-dashboard-mern",
+  "name": "netflex-react",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/api/restfull/index.js",
+  "main": "./src/Index.tsx",
   "scripts": {
     "test": "jest",
     "test-w": "jest --watchAll",
@@ -12,11 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eduardohurtado/task-dashboard-mern"
+    "url": "https://github.com/eduardohurtado/netflex-react"
   },
   "author": "Eduardo Hurtado",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-brands-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "axios": "^0.21.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
