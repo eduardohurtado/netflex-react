@@ -1,7 +1,11 @@
 // Dependencies
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { fetchMovieDetail } from "../../../../services";
+import { Link, useParams } from "react-router-dom";
+import {
+  fetchCasts,
+  fetchMovieDetail,
+  fetchSimilarMovie
+} from "../../../../services";
 import ReactStars from "react-rating-stars-component";
 
 // Models
@@ -31,21 +35,42 @@ interface IGenres {
   name: string;
 }
 
+interface ICasts {
+  id: number;
+  character: string;
+  name: string;
+  image: string;
+}
+
+interface IMovies {
+  id: number[];
+  backPoster: string;
+  popularity: number;
+  title: string;
+  poster: string;
+  overview: string;
+  rating: number;
+}
+
 export default function MovieDetail(): JSX.Element {
   const [detail, setDetail] = useState<IMovieDetails | null>(null);
   const [genresList, setGenresList] = useState<IGenres[]>([]);
+  const [casts, setCasts] = useState<ICasts[] | null>();
+  const [similarMovie, setSimilarMovie] = useState<IMovies[] | null>();
 
   const params: IParams = useParams();
 
   useEffect(() => {
-    if (params) {
+    if (params.id) {
       const fetchAPI = async () => {
         setDetail(await fetchMovieDetail(params.id));
+        setCasts(await fetchCasts(params.id));
+        setSimilarMovie(await fetchSimilarMovie(params.id));
       };
 
       fetchAPI();
     }
-  }, []);
+  }, [params.id]);
 
   useEffect(() => {
     if (detail?.genres) {
@@ -60,6 +85,46 @@ export default function MovieDetail(): JSX.Element {
           {item.name}
         </button>
       </li>
+    );
+  });
+
+  const castsList = casts?.slice(0, 4).map((item, index) => {
+    return (
+      <div key={index} className="col-md-3 text-center">
+        <img
+          className="img-fluid rounded-circle mx-auto d-block"
+          src={item.image}
+          alt={item.name}
+        />
+        <p className="font-weight-bold text-center">{item.name} </p>
+        <p
+          className="font-weight-light text-center"
+          style={{ color: "#5a606b" }}
+        >
+          {item.character}
+        </p>
+      </div>
+    );
+  });
+
+  const similarMovieList = similarMovie?.slice(0, 4).map((item, index) => {
+    return (
+      <div className="col-md-3" key={index}>
+        <div className="card">
+          <Link to={`/MovieDetails/${item.id}`}>
+            <img className="img-fluid" src={item.poster} alt={item.title} />
+          </Link>
+        </div>
+        <div className="mt-3">
+          <p style={{ fontWeight: "bolder" }}>{item.title} </p>
+          <p>Rated: {item.rating} </p>
+          <ReactStars
+            count={item.rating}
+            size={20}
+            color1={"#f4c10f"}
+          ></ReactStars>
+        </div>
+      </div>
     );
   });
 
@@ -109,10 +174,34 @@ export default function MovieDetail(): JSX.Element {
       </div>
 
       <div className="row mt-3">
+        <div className="col-md-3">
+          <p style={{ color: "#5a606b", fontWeight: "bolder" }}>STATUS</p>
+          <p style={{ color: "#f4c10f" }}>{detail?.status}</p>
+        </div>
+
+        <div className="col-md-3">
+          <p style={{ color: "#5a606b", fontWeight: "bolder" }}>RELEASE DATE</p>
+          <p style={{ color: "#f4c10f" }}>{detail?.release_date}</p>
+        </div>
+
+        <div className="col-md-3">
+          <p style={{ color: "#5a606b", fontWeight: "bolder" }}>RUN TIME</p>
+          <p style={{ color: "#f4c10f" }}>{detail?.runtime}</p>
+        </div>
+
+        <div className="col-md-3">
+          <p style={{ color: "#5a606b", fontWeight: "bolder" }}>BUDGET</p>
+          <p style={{ color: "#f4c10f" }}>{detail?.budget}</p>
+        </div>
+      </div>
+
+      <div className="row mt-3">
         <div className="col">
           <p style={{ color: "#5a606b", fontWeight: "bolder" }}>CASTS</p>
         </div>
       </div>
+
+      <div className="row mt-3">{castsList}</div>
 
       <div className="row mt-3">
         <div className="col">
@@ -121,6 +210,13 @@ export default function MovieDetail(): JSX.Element {
           </p>
         </div>
       </div>
+
+      <div className="row mt-3">{similarMovieList}</div>
+      {!similarMovie && (
+        <div style={{ color: "#5a606b" }}>
+          Sorry but... there are not similar movies for this one :(
+        </div>
+      )}
 
       <hr className="mt-5" style={{ borderTop: "1px solid #5a606b" }} />
 
