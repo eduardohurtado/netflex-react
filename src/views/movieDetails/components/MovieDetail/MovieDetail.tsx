@@ -9,7 +9,7 @@ import {
 import ReactStars from "react-rating-stars-component";
 
 // Models
-import IMovieDetails from "../../../../models/MovieDetails";
+import IMovieDetails from "../../../../models/IMovieDetails";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

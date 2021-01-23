@@ -12,7 +12,7 @@ const moviesUrl = `${URI}/discover/movie`;
 const personUrl = `${URI}/trending/person/week`;
 
 // Models
-import IMovieDetails from "../models/MovieDetails";
+import IMovieDetails from "../models/IMovieDetails";
 
 interface IMovies {
   id: number[];

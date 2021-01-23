@@ -6,11 +6,12 @@ import { HashRouter as Router, Route } from "react-router-dom";
 import Loading from "./tools/components/Loading/Loading";
 
 // Components
-import HomePage from "./views/home/components/HomePage/HomePage";
+import HomeLayout from "./views/home/components/HomeLayout/HomeLayout";
+import IndexLayout from "./views/index/components/IndexLayout/IndexLayout";
 
 // Lazy loaded components
 const MovieDetail = React.lazy(
-  () => import("./views/home/components/MovieDetail/MovieDetail")
+  () => import("./views/movieDetails/components/MovieDetail/MovieDetail")
 );
 
 // Global styles
@@ -29,7 +30,15 @@ class App extends React.Component {
             exact
             path="/"
             render={() => {
-              return <HomePage />;
+              return <IndexLayout />;
+            }}
+          ></Route>
+
+          <Route
+            exact
+            path="/Home"
+            render={() => {
+              return <HomeLayout />;
             }}
           ></Route>
 
