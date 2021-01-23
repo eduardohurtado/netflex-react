@@ -38,7 +38,11 @@ class App extends React.Component {
             exact
             path="/Home"
             render={() => {
-              return <HomeLayout />;
+              return (
+                <Suspense fallback={<Loading />}>
+                  <HomeLayout />
+                </Suspense>
+              );
             }}
           ></Route>
 

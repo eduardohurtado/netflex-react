@@ -1,5 +1,8 @@
 // Dependencies
-import React from "react";
+import React, { Suspense } from "react";
+
+// Tools
+import Loading from "../../../../tools/components/Loading/Loading";
 
 // components
 import Carousel from "../Carousel/Carousel";
@@ -14,15 +17,25 @@ import "../../scss/homeLayoutStyle.scss";
 export default function HomeLayout(): JSX.Element {
   return (
     <div className="container homeStyles">
-      <Carousel />
+      <Suspense fallback={<Loading />}>
+        <Carousel />
+      </Suspense>
 
-      <GenreMovieList />
+      <Suspense fallback={<Loading />}>
+        <GenreMovieList />
+      </Suspense>
 
-      <TrendingPerson />
+      <Suspense fallback={<Loading />}>
+        <TrendingPerson />
+      </Suspense>
 
-      <TopRatedMovies />
+      <Suspense fallback={<Loading />}>
+        <TopRatedMovies />
+      </Suspense>
 
-      <Footer />
+      <Suspense fallback={<Loading />}>
+        <Footer />
+      </Suspense>
     </div>
   );
 }
