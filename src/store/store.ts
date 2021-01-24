@@ -6,11 +6,13 @@ interface IAction {
   type: string;
   data: IMovieDetails;
   castsData: ICasts[];
+  similarMoviesData: IMovies[];
   payload: [];
 }
 interface IAppState {
   movieDetails: IMovieDetails | null;
   casts: ICasts[] | null;
+  similarMovies: IMovies[] | null;
 }
 interface ICasts {
   id: number;
@@ -18,11 +20,21 @@ interface ICasts {
   name: string;
   image: string;
 }
+interface IMovies {
+  id: number[];
+  backPoster: string;
+  popularity: number;
+  title: string;
+  poster: string;
+  overview: string;
+  rating: number;
+}
 
 //APP default initial state
 const appState: IAppState = {
   movieDetails: null,
-  casts: null
+  casts: null,
+  similarMovies: null
 };
 
 const reducer = (state = appState, action: IAction): IAppState => {
@@ -35,6 +47,11 @@ const reducer = (state = appState, action: IAction): IAppState => {
     return {
       ...state,
       casts: action.castsData
+    };
+  } else if (action.type === "SIMILAR_MOVIE_ASYNC") {
+    return {
+      ...state,
+      similarMovies: action.similarMoviesData
     };
   }
 

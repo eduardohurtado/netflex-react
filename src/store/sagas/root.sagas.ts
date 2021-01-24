@@ -19,21 +19,39 @@ interface ICasts {
   name: string;
   image: string;
 }
+interface ISimilarFromServer {
+  page: number;
+  results: [];
+  total_pages: number;
+  total_results: number;
+}
+interface IMovies {
+  id: number[];
+  backPoster: string;
+  popularity: number;
+  title: string;
+  poster: string;
+  overview: string;
+  rating: number;
+}
+interface IMoviesFromServer {
+  id: number[];
+  backdrop_path: string;
+  popularity: number;
+  title: string;
+  poster_path: string;
+  overview: string;
+  vote_average: number;
+}
 
 // API connection
 const apiKey = "98179848b35435b028ff7dc5f9d382d7";
 const URI = "https://api.themoviedb.org/3";
-const nowPlayingUrl = `${URI}/movie/now_playing`;
-const topRatedUrl = `${URI}/movie/top_rated`;
 const movieUrl = `${URI}/movie`;
-const genereUrl = `${URI}/genre/movie/list`;
-const moviesUrl = `${URI}/discover/movie`;
-const personUrl = `${URI}/trending/person/week`;
 
 // SAGA
 function* fetchMovieDetailsAsync(action: IAction) {
   try {
-    // Cannot change "data" name!!!
     const { data } = yield axios.get(`${movieUrl}/${action.movie_id}`, {
       params: {
         api_key: apiKey,
@@ -43,7 +61,7 @@ function* fetchMovieDetailsAsync(action: IAction) {
 
     yield put({ type: "MOVIE_DETAILS_ASYNC", data });
   } catch (error) {
-    console.error("Error on 'fetchMovieDetailsAsync'", error);
+    console.error("Error on 'fetchMovieDetailsAsync':", error);
   }
 }
 
@@ -68,7 +86,43 @@ function* fetchCastsAsync(action: IAction) {
 
     yield put({ type: "CASTS_ASYNC", castsData });
   } catch (error) {
-    console.error(`Error on "fetchCastsAsync"`, error);
+    console.error("Error on 'fetchCastsAsync':", error);
+  }
+}
+
+// SAGA
+function* fetchSimilarMovieAsync(action: IAction) {
+  try {
+    const { data } = yield axios.get(`${movieUrl}/${action.movie_id}/similar`, {
+      params: {
+        api_key: apiKey,
+        language: "en-US"
+      }
+    });
+
+    const dataTyped = data as ISimilarFromServer;
+
+    const posterUrl = "https://image.tmdb.org/t/p/original/";
+
+    if (dataTyped.results.length > 0) {
+      const similarMoviesData: IMovies[] = yield data["results"].map(
+        (m: IMoviesFromServer) => ({
+          id: m["id"],
+          backPoster: posterUrl + m["backdrop_path"],
+          popularity: m["popularity"],
+          title: m["title"],
+          poster: posterUrl + m["poster_path"],
+          overview: m["overview"],
+          rating: m["vote_average"]
+        })
+      );
+
+      yield put({ type: "SIMILAR_MOVIE_ASYNC", similarMoviesData });
+    } else {
+      console.log("Something went wrong on 'fetchSimilarMovieAsync' :(");
+    }
+  } catch (error) {
+    console.error("Error on 'fetchSimilarMovieAsync':", error);
   }
 }
 
@@ -76,6 +130,7 @@ function* fetchCastsAsync(action: IAction) {
 export function* watchAll(): Generator<unknown> {
   yield all([
     takeLatest("FETCH_MOVIE_DETAILS_ASYNC", fetchMovieDetailsAsync),
-    takeLatest("FETCH_CASTS_ASYNC", fetchCastsAsync)
+    takeLatest("FETCH_CASTS_ASYNC", fetchCastsAsync),
+    takeLatest("FETCH_SIMILAR_MOVIE_ASYNC", fetchSimilarMovieAsync)
   ]);
 }

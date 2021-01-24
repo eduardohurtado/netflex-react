@@ -3,15 +3,18 @@ import React, { Suspense } from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
 
 // Tools
-import Loading from "./tools/components/Loading/Loading";
+import Loading from "./views/shared/components/Loading/Loading";
 
 // Components
 import HomeLayout from "./views/home/components/HomeLayout/HomeLayout";
 import IndexLayout from "./views/index/components/IndexLayout/IndexLayout";
 
 // Lazy loaded components
-const MovieDetail = React.lazy(
-  () => import("./views/movieDetails/components/MovieDetail/MovieDetail")
+const MovieDetailsLayout = React.lazy(
+  () =>
+    import(
+      "./views/movieDetails/components/MovieDetailsLayout/MovieDetailsLayout"
+    )
 );
 
 // Global styles
@@ -52,7 +55,7 @@ class App extends React.Component {
             render={() => {
               return (
                 <Suspense fallback={<Loading />}>
-                  <MovieDetail />
+                  <MovieDetailsLayout />
                 </Suspense>
               );
             }}
