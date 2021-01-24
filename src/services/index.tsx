@@ -112,7 +112,7 @@ export const fetchGenre = async (): Promise<IGenresFromServer | null> => {
   }
 };
 export const fetchMovieByGenre = async (
-  genre_id: number
+  getFetchString: string
 ): Promise<IMovies | null> => {
   try {
     const { data } = await axios.get(moviesUrl, {
@@ -120,7 +120,7 @@ export const fetchMovieByGenre = async (
         api_key: apiKey,
         language: "en-US",
         page: 1,
-        with_genres: genre_id
+        with_genres: getFetchString
       }
     });
 

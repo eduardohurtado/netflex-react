@@ -7,6 +7,7 @@ import MoviesByGenreList from "../MoviesByGenreList/MoviesByGenreList";
 import TrendingPerson from "../TrendingPerson/TrendingPerson";
 import TopRatedMovies from "../TopRatedMovies/TopRatedMovies";
 import Footer from "../../../shared/components/Footer/Footer";
+import NavBar from "../../../shared/components/NavBar/NavBar";
 
 // Shared components
 import Loading from "../../../../views/shared/components/Loading/Loading";
@@ -17,6 +18,10 @@ import "../../scss/homeLayoutStyle.scss";
 export default function HomeLayout(): JSX.Element {
   return (
     <div className="container homeStyles">
+      <Suspense fallback={<Loading />}>
+        <NavBar />
+      </Suspense>
+
       <Suspense fallback={<Loading />}>
         <Carousel />
       </Suspense>

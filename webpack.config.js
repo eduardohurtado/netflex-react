@@ -40,7 +40,7 @@ module.exports = {
       favicon: "./public/favicon.ico"
     })
   ],
-  //   devtool: "source-map",
+  devtool: "source-map",
   devServer: {
     port: 3000,
     historyApiFallback: true
@@ -57,11 +57,11 @@ module.exports = {
         loader: "babel-loader",
         exclude: /node_modules/
       },
-      //   {
-      //     enforce: "pre",
-      //     test: /\.js?$/,
-      //     loader: "source-map-loader",
-      //   },
+      {
+        enforce: "pre",
+        test: /\.js?$/,
+        loader: "source-map-loader"
+      },
       {
         test: /\.s[ac]ss$/i,
         use: [

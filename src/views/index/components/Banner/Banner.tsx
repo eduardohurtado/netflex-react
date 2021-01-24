@@ -5,5 +5,5 @@ import React from "react";
 import "./bannerStyles.scss";
 
 export default function Banner(): JSX.Element {
-  return <div className="bannerStyles"></div>;
+  return <div className="bannerStyles mt-1"></div>;
 }

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 // Components
 import Banner from "../Banner/Banner";
+import NavBar from "../../../shared/components/NavBar/NavBar";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +16,8 @@ import creciLogo from "../../../../assets/img/creciLogo.png";
 export default function IndexLayout(): JSX.Element {
   return (
     <div className="container">
+      <NavBar />
+
       <Banner />
 
       <p
