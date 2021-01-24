@@ -1,12 +1,14 @@
 // Dependencies
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Dispatch } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  fetchCasts,
-  fetchMovieDetail,
-  fetchSimilarMovie
-} from "../../../../services";
+import { fetchSimilarMovie } from "../../../../services";
 import ReactStars from "react-rating-stars-component";
+
+//Global state REDUX
+import { connect } from "react-redux";
+
+// Components
+// import Banner from '../Banner/Banner'
 
 // Models
 import IMovieDetails from "../../../../models/IMovieDetails";
@@ -26,22 +28,32 @@ import {
   faGithub
 } from "@fortawesome/free-brands-svg-icons";
 
+// Interfaces
+interface IProps {
+  state: {
+    movieDetails: IMovieDetails | null;
+    casts: ICasts[] | null;
+  };
+  fetchMovieDetailsAsync(movie_id: string): void;
+  fetchCastsAsync(movie_id: string): void;
+}
+interface IReduxState {
+  movieDetails: IMovieDetails | null;
+  casts: ICasts[] | null;
+}
 interface IParams {
   id: string;
 }
-
 interface IGenres {
   id: number;
   name: string;
 }
-
 interface ICasts {
   id: number;
   character: string;
   name: string;
   image: string;
 }
-
 interface IMovies {
   id: number[];
   backPoster: string;
@@ -52,8 +64,8 @@ interface IMovies {
   rating: number;
 }
 
-export default function MovieDetail(): JSX.Element {
-  const [detail, setDetail] = useState<IMovieDetails | null>(null);
+function MovieDetail(props: IProps): JSX.Element {
+  const [detail, setDetail] = useState<IMovieDetails | null>();
   const [genresList, setGenresList] = useState<IGenres[]>([]);
   const [casts, setCasts] = useState<ICasts[] | null>();
   const [similarMovie, setSimilarMovie] = useState<IMovies[] | null>();
@@ -63,14 +75,26 @@ export default function MovieDetail(): JSX.Element {
   useEffect(() => {
     if (params.id) {
       const fetchAPI = async () => {
-        setDetail(await fetchMovieDetail(params.id));
-        setCasts(await fetchCasts(params.id));
         setSimilarMovie(await fetchSimilarMovie(params.id));
       };
 
       fetchAPI();
+
+      // Call to get data to REDUX state
+      props.fetchMovieDetailsAsync(params.id);
+      props.fetchCastsAsync(params.id);
     }
   }, [params.id]);
+
+  useEffect(() => {
+    // Set local state from REDUX state change
+    if (props.state.movieDetails) {
+      setDetail(props.state.movieDetails);
+    }
+    if (props.state.casts) {
+      setCasts(props.state.casts);
+    }
+  }, [props.state]);
 
   useEffect(() => {
     if (detail?.genres) {
@@ -130,6 +154,8 @@ export default function MovieDetail(): JSX.Element {
 
   return (
     <div className="container">
+      {/* <Banner/>  */}
+
       <div className="container-fluid mt-1">
         <img
           src={`https://image.tmdb.org/t/p/original/${detail?.backdrop_path}`}
@@ -306,3 +332,30 @@ export default function MovieDetail(): JSX.Element {
     </div>
   );
 }
+
+const mapStateToProps = (state: IReduxState) => {
+  return {
+    //Passing the current state of "store.js" because
+    state //mapDispatchToProps don't work without
+  }; //define mapStateToProps.
+};
+
+const mapDispatchToProps = (
+  dispatch: Dispatch<{ type: string; movie_id: string }>
+) => ({
+  fetchMovieDetailsAsync(movie_id: string) {
+    dispatch({
+      type: "FETCH_MOVIE_DETAILS_ASYNC",
+      movie_id
+    });
+  },
+
+  fetchCastsAsync(movie_id: string) {
+    dispatch({
+      type: "FETCH_CASTS_ASYNC",
+      movie_id
+    });
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDetail);

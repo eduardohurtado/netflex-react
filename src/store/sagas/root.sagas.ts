@@ -1,118 +1,81 @@
+// Dependencies
 import { takeLatest, all, put } from "redux-saga/effects";
-import { notifySuccess } from "../../components/tools/Notification/Notification";
+import axios from "axios";
 
-//Interfaces
+// Interfaces
 interface IAction {
   type: string;
-  id: string;
-  title: string;
-  description: string;
-  done: boolean;
-  payload: any[];
+  movie_id: string;
+}
+interface ICastsFromServer {
+  id: number;
+  character: string;
+  name: string;
+  profile_path: string;
+}
+interface ICasts {
+  id: number;
+  character: string;
+  name: string;
+  image: string;
 }
 
-interface INewTask {
-  title: string;
-  description: string;
-  done: boolean;
-}
+// API connection
+const apiKey = "98179848b35435b028ff7dc5f9d382d7";
+const URI = "https://api.themoviedb.org/3";
+const nowPlayingUrl = `${URI}/movie/now_playing`;
+const topRatedUrl = `${URI}/movie/top_rated`;
+const movieUrl = `${URI}/movie`;
+const genereUrl = `${URI}/genre/movie/list`;
+const moviesUrl = `${URI}/discover/movie`;
+const personUrl = `${URI}/trending/person/week`;
 
-function renameKeys(e: any): any {
-  // function to rename ID
-  e = e.map((obj: any) => {
-    obj["id"] = obj["_id"]; //Assign new key
-    delete obj["_id"]; //Delete old key
-    delete obj["__v"]; //Delete useless key
-    return obj;
-  });
-  return e;
-}
-
-function* downloadTasksAsync() {
-  var payload: any[] = [];
-  yield fetch("/api/tasks")
-    .then((res) => res.json())
-    .then((data) => {
-      payload = renameKeys(data);
-      console.log("DATA FOM MONGO DB SERVER:");
-      console.log(payload);
+// SAGA
+function* fetchMovieDetailsAsync(action: IAction) {
+  try {
+    // Cannot change "data" name!!!
+    const { data } = yield axios.get(`${movieUrl}/${action.movie_id}`, {
+      params: {
+        api_key: apiKey,
+        language: "en-US"
+      }
     });
 
-  yield put({ type: "DOWNLOAD_TASKS_MONGO_ASYNC", payload });
+    yield put({ type: "MOVIE_DETAILS_ASYNC", data });
+  } catch (error) {
+    console.error("Error on 'fetchMovieDetailsAsync'", error);
+  }
 }
 
-function* addTaskReduxAsync(action: IAction) {
-  console.log("Task to be saved in Mongo DB: ");
-  console.log(action);
+// SAGA
+function* fetchCastsAsync(action: IAction) {
+  try {
+    const { data } = yield axios.get(`${movieUrl}/${action.movie_id}/credits`, {
+      params: {
+        api_key: apiKey,
+        language: "en-US"
+      }
+    });
 
-  let newTask: INewTask = {
-    title: action.title,
-    description: action.description,
-    done: false,
-  };
-  //Save the new task to Mongo DB
-  yield fetch("/api/tasks", {
-    method: "POST",
-    body: JSON.stringify(newTask),
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => {
-      notifySuccess("Success!", "The new task was saved.");
-      res.json();
-    })
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
+    const castsData: ICasts[] = yield data["cast"].map(
+      (c: ICastsFromServer) => ({
+        id: c["id"],
+        character: c["character"],
+        name: c["name"],
+        image: "https://image.tmdb.org/t/p/w200/" + c["profile_path"]
+      })
+    );
 
-  yield downloadTasksAsync();
+    yield put({ type: "CASTS_ASYNC", castsData });
+  } catch (error) {
+    console.error(`Error on "fetchCastsAsync"`, error);
+  }
 }
 
-function* deleteTaskReduxAsync(action: IAction) {
-  let id: string = action.id;
-  yield fetch(`/api/tasks/${action.id}`, {
-    method: "DELETE",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
-
-  yield downloadTasksAsync();
-  yield put({ type: "TASK_DELETE_ASYNC", id });
-}
-
-function* checkDoneAsync(action: IAction) {
-  let updateTask: INewTask = {
-    title: action.title,
-    description: action.description,
-    done: !action.done,
-  };
-
-  yield fetch(`/api/tasks/${action.id}`, {
-    method: "PUT",
-    body: JSON.stringify(updateTask),
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
-
-  yield downloadTasksAsync();
-}
-
-export function* watchAll() {
+// Watch ALL Redux Saga Middleware
+export function* watchAll(): Generator<unknown> {
   yield all([
-    takeLatest("DOWNLOAD_TASKS_MONGO", downloadTasksAsync),
-    takeLatest("ADD_NEW_TASK", addTaskReduxAsync),
-    takeLatest("TASK_DELETE", deleteTaskReduxAsync),
-    takeLatest("TASK_DONE", checkDoneAsync),
+    takeLatest("FETCH_MOVIE_DETAILS_ASYNC", fetchMovieDetailsAsync),
+    takeLatest("FETCH_CASTS_ASYNC", fetchCastsAsync)
   ]);
 }

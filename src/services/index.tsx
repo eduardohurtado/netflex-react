@@ -12,7 +12,7 @@ const moviesUrl = `${URI}/discover/movie`;
 const personUrl = `${URI}/trending/person/week`;
 
 // Models
-import IMovieDetails from "../models/IMovieDetails";
+// import IMovieDetails from "../models/IMovieDetails";
 
 interface IMovies {
   id: number[];
@@ -59,19 +59,19 @@ interface IPersons {
   known: string;
 }
 
-interface ICastsFromServer {
-  id: number;
-  character: string;
-  name: string;
-  profile_path: string;
-}
+// interface ICastsFromServer {
+//   id: number;
+//   character: string;
+//   name: string;
+//   profile_path: string;
+// }
 
-interface ICasts {
-  id: number;
-  character: string;
-  name: string;
-  image: string;
-}
+// interface ICasts {
+//   id: number;
+//   character: string;
+//   name: string;
+//   image: string;
+// }
 
 interface ISimilarFromServer {
   page: number;
@@ -226,50 +226,50 @@ export const fetchTopRatedMovie = async (): Promise<IMovies | null> => {
   }
 };
 
-export const fetchMovieDetail = async (
-  movie_id: string
-): Promise<IMovieDetails | null> => {
-  try {
-    const { data } = await axios.get(`${movieUrl}/${movie_id}`, {
-      params: {
-        api_key: apiKey,
-        language: "en-US"
-      }
-    });
+// export const fetchMovieDetail = async (
+//   movie_id: string
+// ): Promise<IMovieDetails | null> => {
+//   try {
+//     const { data } = await axios.get(`${movieUrl}/${movie_id}`, {
+//       params: {
+//         api_key: apiKey,
+//         language: "en-US"
+//       }
+//     });
 
-    return data;
-  } catch (error) {
-    console.error(error);
+//     return data;
+//   } catch (error) {
+//     console.error(error);
 
-    return null;
-  }
-};
+//     return null;
+//   }
+// };
 
-export const fetchCasts = async (
-  movie_id: string
-): Promise<ICasts[] | null> => {
-  try {
-    const { data } = await axios.get(`${movieUrl}/${movie_id}/credits`, {
-      params: {
-        api_key: apiKey,
-        language: "en-US"
-      }
-    });
+// export const fetchCasts = async (
+//   movie_id: string
+// ): Promise<ICasts[] | null> => {
+//   try {
+//     const { data } = await axios.get(`${movieUrl}/${movie_id}/credits`, {
+//       params: {
+//         api_key: apiKey,
+//         language: "en-US"
+//       }
+//     });
 
-    const modifiedData: ICasts[] = data["cast"].map((c: ICastsFromServer) => ({
-      id: c["id"],
-      character: c["character"],
-      name: c["name"],
-      image: "https://image.tmdb.org/t/p/w200/" + c["profile_path"]
-    }));
+//     const modifiedData: ICasts[] = data["cast"].map((c: ICastsFromServer) => ({
+//       id: c["id"],
+//       character: c["character"],
+//       name: c["name"],
+//       image: "https://image.tmdb.org/t/p/w200/" + c["profile_path"]
+//     }));
 
-    return modifiedData;
-  } catch (error) {
-    console.error(error);
+//     return modifiedData;
+//   } catch (error) {
+//     console.error(error);
 
-    return null;
-  }
-};
+//     return null;
+//   }
+// };
 
 export const fetchSimilarMovie = async (
   movie_id: string

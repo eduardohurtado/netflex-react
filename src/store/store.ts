@@ -1,45 +1,41 @@
-//Interfaces
-interface IAppStateMongo {
-  tasks: {
-    id: string;
-    title: string;
-    description: string;
-    done: boolean;
-  }[];
-  isLoading: boolean;
-}
+// Models
+import IMovieDetails from "../models/IMovieDetails";
 
+// Interfaces
 interface IAction {
   type: string;
-  id: string;
-  title: string;
-  description: string;
-  payload: any;
+  data: IMovieDetails;
+  castsData: ICasts[];
+  payload: [];
+}
+interface IAppState {
+  movieDetails: IMovieDetails | null;
+  casts: ICasts[] | null;
+}
+interface ICasts {
+  id: number;
+  character: string;
+  name: string;
+  image: string;
 }
 
 //APP default initial state
-const initialStateMongo: IAppStateMongo = {
-  tasks: [],
-  isLoading: true,
+const appState: IAppState = {
+  movieDetails: null,
+  casts: null
 };
 
-const reducer = (state = initialStateMongo, action: IAction) => {
-  if (action.type === "DOWNLOAD_TASKS_MONGO_ASYNC") {
-    const checkIfEmpty = (): boolean => {
-      if (action.payload.length < 1) {
-        return true;
-      } else {
-        return false;
-      }
-    };
+const reducer = (state = appState, action: IAction): IAppState => {
+  if (action.type === "MOVIE_DETAILS_ASYNC") {
     return {
       ...state,
-
-      tasks: action.payload,
-      isLoading: checkIfEmpty(),
+      movieDetails: action.data
     };
-  } else if (action.type === "TASK_DELETE_ASYNC") {
-    console.log("Task deleted from server:", action.id);
+  } else if (action.type === "CASTS_ASYNC") {
+    return {
+      ...state,
+      casts: action.castsData
+    };
   }
 
   return state;
