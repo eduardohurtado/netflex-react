@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 
 // Styles
-import "./genreMovieList.scss";
+import "./moviesByGenreList.scss";
 const navigationIcon: React.CSSProperties = {
   color: "#f4c10f",
   fontSize: 30,
@@ -22,7 +22,7 @@ const navigationIcon: React.CSSProperties = {
 
 import { fetchGenre, fetchMovieByGenre } from "../../../../services";
 
-export default function GenreMovieList(): JSX.Element {
+export default function MoviesByGenreList(): JSX.Element {
   const [genres, setGenres] = useState([]);
   const [movieByGenre, setMovieByGenre] = useState([]);
 
