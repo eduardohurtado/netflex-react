@@ -9,6 +9,7 @@ const topRatedUrl = `${URI}/movie/top_rated`;
 const genereUrl = `${URI}/genre/movie/list`;
 const moviesUrl = `${URI}/discover/movie`;
 const personUrl = `${URI}/trending/person/week`;
+const keywordUrl = `${URI}/search/multi`;
 
 interface IMovies {
   id: number[];
@@ -111,6 +112,7 @@ export const fetchGenre = async (): Promise<IGenresFromServer | null> => {
     return null;
   }
 };
+
 export const fetchMovieByGenre = async (
   getFetchString: string
 ): Promise<IMovies | null> => {
@@ -169,6 +171,7 @@ export const fetchPersons = async (): Promise<IPersons | null> => {
     return null;
   }
 };
+
 export const fetchTopRatedMovie = async (): Promise<IMovies | null> => {
   try {
     const { data } = await axios.get(topRatedUrl, {
@@ -182,6 +185,41 @@ export const fetchTopRatedMovie = async (): Promise<IMovies | null> => {
     const posterUrl = "https://image.tmdb.org/t/p/original/";
 
     const modifiedData: IMovies = data["results"].map(
+      (m: IMoviesFromServer) => ({
+        id: m["id"],
+        backPoster: posterUrl + m["backdrop_path"],
+        popularity: m["popularity"],
+        title: m["title"],
+        poster: posterUrl + m["poster_path"],
+        overview: m["overview"],
+        rating: m["vote_average"]
+      })
+    );
+
+    return modifiedData;
+  } catch (error) {
+    console.error(error);
+
+    return null;
+  }
+};
+
+export const fetchMovieByKeyword = async (
+  words: string
+): Promise<IMovies[] | null> => {
+  try {
+    const { data } = await axios.get(keywordUrl, {
+      params: {
+        api_key: apiKey,
+        language: "en-US",
+        page: 1,
+        query: words
+      }
+    });
+
+    const posterUrl = "https://image.tmdb.org/t/p/original/";
+
+    const modifiedData: IMovies[] = data["results"].map(
       (m: IMoviesFromServer) => ({
         id: m["id"],
         backPoster: posterUrl + m["backdrop_path"],
