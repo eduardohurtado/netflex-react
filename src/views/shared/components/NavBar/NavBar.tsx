@@ -71,7 +71,7 @@ export default function NavBar(): JSX.Element {
               </Link>
             </li>
             <li className="nav-item active">
-              <Link to="/home">
+              <Link to="/movies">
                 <a className="nav-link" style={{ color: "#eeeeee" }}>
                   Movies <span className="sr-only">(current)</span>
                 </a>

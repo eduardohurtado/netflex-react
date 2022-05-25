@@ -29,9 +29,9 @@ export default function IndexLayout(): JSX.Element {
       </p>
 
       <div className="d-flex justify-content-center">
-        <Link to="/home">
+        <Link to="/movies">
           <button className="btn btn-outline-primary" type="button">
-            <FontAwesomeIcon icon={faFilm} /> Go to Home{" "}
+            <FontAwesomeIcon icon={faFilm} /> Go to Movies{" "}
             <FontAwesomeIcon icon={faFilm} />
           </button>
         </Link>

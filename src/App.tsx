@@ -39,7 +39,7 @@ class App extends React.Component {
 
           <Route
             exact
-            path="/Home"
+            path="/movies"
             render={() => {
               return (
                 <Suspense fallback={<Loading />}>
