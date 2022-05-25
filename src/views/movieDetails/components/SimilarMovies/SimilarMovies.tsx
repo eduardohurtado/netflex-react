@@ -39,7 +39,7 @@ function SimilarMovies(props: IProps) {
   }, [params.id]);
 
   useEffect(() => {
-    // // Set local state from REDUX state change
+    // Set local state from REDUX state change
     if (props.state.similarMovies) {
       setSimilarMovie(props.state.similarMovies);
     }

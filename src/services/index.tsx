@@ -41,6 +41,7 @@ interface IPersonsFromServer {
   known_for: IKnownFor[];
   name: string;
   profile_path: string;
+  popularity: number;
   known_for_department: string;
 }
 
@@ -82,7 +83,7 @@ export const fetchMovies = async (): Promise<IMovies | null> => {
 
     return modifiedData;
   } catch (error) {
-    console.error(error);
+    console.error("Error on fetchMovies:", error);
 
     return null;
   }
@@ -142,7 +143,7 @@ export const fetchMovieByGenre = async (
 
     return modifiedData;
   } catch (error) {
-    console.error(error);
+    console.error("Error on fetchMovieByGenre:", error);
 
     return null;
   }
@@ -158,7 +159,7 @@ export const fetchPersons = async (): Promise<IPersons | null> => {
 
     const modifiedData = data["results"].map((p: IPersonsFromServer) => ({
       id: p["id"],
-      popularity: p.known_for[0].popularity,
+      popularity: p.popularity,
       name: p["name"],
       profileImg: "https://image.tmdb.org/t/p/w200" + p["profile_path"],
       known: p["known_for_department"]
@@ -166,7 +167,7 @@ export const fetchPersons = async (): Promise<IPersons | null> => {
 
     return modifiedData;
   } catch (error) {
-    console.error(error);
+    console.error("Error on fetchPersons:", error);
 
     return null;
   }
@@ -198,7 +199,7 @@ export const fetchTopRatedMovie = async (): Promise<IMovies | null> => {
 
     return modifiedData;
   } catch (error) {
-    console.error(error);
+    console.error("Error on fetchTopRatedMovie:", error);
 
     return null;
   }
@@ -233,7 +234,7 @@ export const fetchMovieByKeyword = async (
 
     return modifiedData;
   } catch (error) {
-    console.error(error);
+    console.error("Error on fetchMovieByKeyword:", error);
 
     return null;
   }
