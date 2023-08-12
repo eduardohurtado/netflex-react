@@ -3,17 +3,17 @@ import React, { useState, useEffect } from "react";
 import RBCarousel from "react-bootstrap-carousel";
 
 // Models
-import IMovies from "../../../../models/IMovies";
+import IMovies from "models/IMovies.model";
 
 // Services
-import { fetchMovies } from "../../../../services";
+import { fetchMovies } from "services";
 
 export default function Carousel(): JSX.Element {
   const [nowPlaying, setNowPlaying] = useState([]);
 
   useEffect(() => {
     const fetchAPI = async () => {
-      setNowPlaying(((await fetchMovies()) as unknown) as []);
+      setNowPlaying((await fetchMovies()) as unknown as []);
     };
 
     fetchAPI();

@@ -4,10 +4,10 @@ import ReactStars from "react-rating-stars-component";
 import { Link } from "react-router-dom";
 
 // Services
-import { fetchTopRatedMovie } from "../../../../services";
+import { fetchTopRatedMovie } from "services";
 
 // Models
-import IMovies from "../../../../models/IMovies";
+import IMovies from "models/IMovies.model";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,7 +26,7 @@ export default function TopRatedMovies(): JSX.Element {
 
   useEffect(() => {
     const fetchAPI = async () => {
-      setTopRated(((await fetchTopRatedMovie()) as unknown) as []);
+      setTopRated((await fetchTopRatedMovie()) as unknown as []);
     };
 
     fetchAPI();

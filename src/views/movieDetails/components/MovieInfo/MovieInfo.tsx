@@ -7,7 +7,7 @@ import ReactStars from "react-rating-stars-component";
 import { connect } from "react-redux";
 
 // Models
-import IMovieDetails from "../../../../models/IMovieDetails";
+import IMovieDetails from "models/IMovieDetails.model";
 
 // Interfaces
 interface IProps {
