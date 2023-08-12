@@ -97,7 +97,7 @@ export default function Footer(): JSX.Element {
             </li>
             <li>
               <FontAwesomeIcon icon={faEnvelope} />
-              <strong>&nbsp;Email:</strong> lehurtadog@gmail.com
+              <strong>&nbsp;Email:</strong> email@gmail.com
             </li>
           </ul>
         </div>

@@ -34,7 +34,7 @@ function Casts(props: IProps) {
   }, [params.id]);
 
   useEffect(() => {
-    // // Set local state from REDUX state change
+    // Set local state from REDUX state change
     if (props.state.casts) {
       setCasts(props.state.casts);
     }

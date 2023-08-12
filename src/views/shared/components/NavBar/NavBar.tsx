@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import IMovies from "../../../../models/IMovies";
-import { fetchMovieByKeyword } from "../../../../services";
+import IMovies from "models/IMovies.model";
+import { fetchMovieByKeyword } from "services";
 
 export default function NavBar(): JSX.Element {
   const [searchResult, setSearchResult] = useState<IMovies[] | null>([]);

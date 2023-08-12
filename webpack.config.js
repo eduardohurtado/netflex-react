@@ -4,12 +4,12 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: ["babel-polyfill", "./src/Index.tsx"],
+  entry: ["./src/Index.tsx"],
   optimization: {
     splitChunks: {
       chunks: "all",
-      minSize: 20000,
-      maxSize: 0,
+      minSize: 200,
+      maxSize: 20000,
       minChunks: 1,
       maxAsyncRequests: 30,
       maxInitialRequests: 30,
@@ -31,8 +31,9 @@ module.exports = {
   mode: "production",
   performance: { hints: false },
   output: {
-    path: path.resolve(__dirname, "build"),
-    filename: "bundle.js"
+    filename: "[name].js",
+    chunkFilename: "[id].[chunkhash].js",
+    path: path.resolve(__dirname, "build")
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -45,17 +46,22 @@ module.exports = {
     port: 3000,
     historyApiFallback: true
   },
-
   resolve: {
-    extensions: [".js", ".tsx", ".ts"]
+    extensions: [".*", ".js", ".jsx", ".ts", ".tsx", ".css", ".scss"],
+    modules: ["./src", "./node_modules"]
   },
-
   module: {
     rules: [
+      // `js` and `jsx` files are parsed using `babel`
       {
-        test: /\.tsx?$/,
-        loader: "babel-loader",
-        exclude: /node_modules/
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ["babel-loader"]
+      },
+      // `ts` and `tsx` files are parsed using `ts-loader`
+      {
+        test: /\.([cm]?ts|tsx)$/,
+        loader: "ts-loader"
       },
       {
         enforce: "pre",
@@ -87,5 +93,11 @@ module.exports = {
         ]
       }
     ]
+  },
+  stats: {
+    colors: true,
+    modules: true,
+    reasons: true,
+    errorDetails: true
   }
 };

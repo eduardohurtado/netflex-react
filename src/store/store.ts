@@ -1,34 +1,4 @@
-// Models
-import IMovieDetails from "../models/IMovieDetails";
-
-// Interfaces
-interface IAction {
-  type: string;
-  data: IMovieDetails;
-  castsData: ICasts[];
-  similarMoviesData: IMovies[];
-  payload: [];
-}
-interface IAppState {
-  movieDetails: IMovieDetails | null;
-  casts: ICasts[] | null;
-  similarMovies: IMovies[] | null;
-}
-interface ICasts {
-  id: number;
-  character: string;
-  name: string;
-  image: string;
-}
-interface IMovies {
-  id: number[];
-  backPoster: string;
-  popularity: number;
-  title: string;
-  poster: string;
-  overview: string;
-  rating: number;
-}
+import { IAppState, IAction } from "./models/store.models";
 
 //APP default initial state
 const appState: IAppState = {

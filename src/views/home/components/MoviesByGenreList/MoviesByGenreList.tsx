@@ -4,8 +4,8 @@ import ReactStars from "react-rating-stars-component";
 import { Link } from "react-router-dom";
 
 // Models
-import IGenres from "../../../../models/IGenres";
-import IMovies from "../../../../models/IMovies";
+import IGenres from "models/IGenres.model";
+import IMovies from "models/IMovies.model";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,42 +21,24 @@ const navigationIcon: React.CSSProperties = {
 };
 
 // Services
-import {
-  fetchGenre,
-  fetchMovieByGenre,
-  fetchMovies
-} from "../../../../services";
+import { fetchGenre, fetchMovieByGenre, fetchMovies } from "services";
 
 export default function MoviesByGenreList(): JSX.Element {
   const [genres, setGenres] = useState([]);
   const [movieByGenre, setMovieByGenre] = useState([]);
-  const [nowPlaying, setNowPlaying] = useState([]);
+  const [, setNowPlaying] = useState([]);
   const [activeButtons, setActiveButtons] = useState(new Set<number>());
 
   const buttons = useRef([] as Array<HTMLElement | null>);
 
   useEffect(() => {
     const fetchAPI = async () => {
-      setGenres(((await fetchGenre()) as unknown) as []);
-      setMovieByGenre(((await fetchMovieByGenre("28")) as unknown) as []);
-      setNowPlaying(((await fetchMovies()) as unknown) as []);
+      setGenres((await fetchGenre()) as unknown as []);
+      setMovieByGenre((await fetchMovieByGenre("28")) as unknown as []);
+      setNowPlaying((await fetchMovies()) as unknown as []);
     };
 
     fetchAPI();
-
-    // Esto es lo que he intentado *****
-
-    // Toggle button "active" class on press
-    // const element = document.getElementById("genresButton");
-    // // or whatever triggers the toggle
-    // const trigger = document.getElementById("js-toggle-sidebar");
-
-    // if (element) {
-    //   element.addEventListener("click", (e) => {
-    //     const element = (e as unknown) as HTMLElement;
-    //     element.classList.add("active");
-    //   });
-    // }
   }, []);
 
   const getFetchString = (): string => {
@@ -84,7 +66,7 @@ export default function MoviesByGenreList(): JSX.Element {
     setActiveButtons(activeButtons);
 
     setMovieByGenre(
-      ((await fetchMovieByGenre(getFetchString())) as unknown) as []
+      (await fetchMovieByGenre(getFetchString())) as unknown as []
     );
   };
 

@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 
 // Services
-import { fetchPersons } from "../../../../services";
+import { fetchPersons } from "services";
 
 // Models
-import IPersons from "../../../../models/IPersons";
+import IPersons from "models/IPersons.model";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,7 +24,7 @@ export default function TrendingPerson(): JSX.Element {
 
   useEffect(() => {
     const fetchAPI = async () => {
-      setPersons(((await fetchPersons()) as unknown) as []);
+      setPersons((await fetchPersons()) as unknown as []);
     };
 
     fetchAPI();
