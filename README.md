@@ -2,7 +2,7 @@
 
 React project where you can see all the data related to your favorite movies.
 
-![React banner](https://imaginaformacion.com/tutoriales/tutorial_78_imagen_1.jpg)
+![React banner](https://miro.medium.com/v2/resize:fit:1087/1*lzeNnfNM-882S_Zx8O5ncA.png)
 
 ## App requirements
 
